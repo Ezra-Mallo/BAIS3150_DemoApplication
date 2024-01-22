@@ -1,0 +1,137 @@
+﻿@page
+@model BAIS3150_DemoApplication.Pages.emallo1StudentModel
+@{
+}
+<!DOCTYPE html>
+<html>
+<head>
+    <meta charset="utf-8" />
+    <title>New Student</title>
+    <script type="text/javascript">
+        function isFormValid(aForm) {
+            var fName = aForm.FirstName.value;
+            var lName = aForm.LastName.value;
+            var eMail = aForm.Email.value;
+            var prog = aForm.Program.value;
+            var userID = aForm.UserID.value;
+            var pass = aForm.Password.value;
+            var confpass = aForm.ConfirmPassword.value;
+            var isValid = true;
+            const emailRegex = /\w+@@\w+(\.\w+)+/;
+            const userIDRegex = /^[A-Z]{4}\d{4}$/;
+
+            if (fName.length === 0) {
+                alert('First Name is required.');
+                aForm.FirstName.focus();
+                isValid = false;
+            } else if (lName.length === 0) {
+                alert('Last Name is required.');
+                aForm.LastName.focus();
+                isValid = false;
+            } else if (eMail.length === 0) {
+                alert('Email is required.');
+                aForm.Email.focus();
+                isValid = false;
+            } else if (!emailRegex.test(eMail)) {
+                alert('Email must be in the format abc@xyz.com.');
+                aForm.Email.focus();
+                isValid = false;
+            } else if (prog === '0') {
+                alert('Select a program');
+                aForm.Program.focus();
+                isValid = false;
+            } else if (userID.length === 0) {
+                alert('User ID is required.');
+                aForm.UserID.focus();
+                isValid = false;
+            } else if (!userIDRegex.test(userID)) {
+                alert('User ID must be in the format BAIS1234.');
+                aForm.UserID.focus();
+                aForm.UserID.select();
+                isValid = false;
+            } else if (pass.length < 6) {
+                alert('Password must be at least 6 characters.');
+                aForm.Password.focus();
+                isValid = false;
+            } else if (pass !== confpass) {
+                alert('Password and Confirm Password must match.');
+                aForm.ConfirmPassword.focus();
+                isValid = false;
+            } else {
+                isValid = true;
+            }
+            return isValid;
+        }
+    </script>
+</head>
+<body>
+    <form name="NewStudentForm" method="post" onsubmit="return isFormValid(this);">
+        <table>
+            <tr>
+                <h1>New Student</h1>
+            </tr>
+            <tr>
+                <td>First Name:</td>
+                <td>
+                    <input type="text" name="FirstName" value="@Model.FirstName" />
+                    @Html.ValidationMessage("FirstName")   <!-- TagHelper, view source in browser-->
+                </td>
+            </tr>
+            <tr>
+                <td>Last Name:</td>
+                <td>
+                    <input type="text" name="LastName" value="@Model.LastName" />
+                    @Html.ValidationMessage("LastName")   <!-- TagHelper, view source in browser-->
+                </td>
+            </tr>
+            <tr>
+                <td>Email:</td>
+                <td>
+                    <input type="email" name="Email" value="@Model.Email" />
+                    @Html.ValidationMessage("Email")   <!-- TagHelper, view source in browser-->
+                </td>
+            </tr>
+
+            <tr>
+                <td>Program:</td>
+                <td>
+                    <select name="Program" size="1" value="@Model.Program">
+                        <option value="0"> </option>
+                        <option value="BAIST"> Bachelor of Applied Information Systems Technology</option>
+                        <option value="BBA"> Bachelor of Business Administration</option>
+                        <option value="PHOT"> Photographic Technology</option>
+                    </select>
+                    @Html.ValidationMessage("Program")   <!-- TagHelper, view source in browser-->
+                </td>
+            </tr>
+            <tr>
+                <td>User ID:</td>
+                <td>
+                    <input type="text" name="UserID" value="@Model.UserID" />
+                    @Html.ValidationMessage("UserID")   <!-- TagHelper, view source in browser-->
+                </td>
+            </tr>
+            <tr>
+                <td>Password:</td>
+                <td>
+                    <input type="password" name="Password" value="@Model.Password" />
+                    @Html.ValidationMessage("Password")   <!-- TagHelper, view source in browser-->
+                </td>
+            </tr>
+            <tr>
+                <td>Confirm Password:</td>
+                <td>
+                    <input type="password" name="ConfirmPassword" value="@Model.ConfirmPassword" />
+                    @Html.ValidationMessage("ConfirmPassword")   <!-- TagHelper, view source in browser-->
+                </td>
+            </tr>
+            <tr>
+                <td>
+                    <input type="submit" name="Submit" value="Submit" />
+                </td>
+            </tr>
+        </table>
+    </form>
+    @Model.Message
+</body>
+</html>

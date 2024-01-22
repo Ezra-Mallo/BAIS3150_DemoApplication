@@ -1,0 +1,68 @@
+﻿@page
+@model BAIS3150_DemoApplication.Pages.emallo1CategoriesModel
+@namespace BAIS3150_DemoApplication.Domain 
+@{
+    CategoryHandler CategoryDirector = new();
+    List<Category> PageCategories = CategoryDirector.GetCategories();
+}
+<!DOCTYPE html>
+<html>
+    <head>
+        <meta charset="utf-8" />
+        
+    </head>
+    <body>
+    <table border="1" cellpadding="0" cellspacing="0">
+        <thead>
+            <tr>
+                <th>Category Name</th>
+                <th>Description</th>
+                <th>Picture</th>
+            </tr>
+        </thead>
+        <tbody>
+            @if (PageCategories != null && PageCategories.Count > 0)
+            {
+                @foreach (var category in PageCategories)
+                {
+                    <tr>
+                        <td>@category.CategoryName</td>
+                        <td>@category.Description</td>
+                        <td>
+                            @if (category.Picture != null)
+                            {
+                                // Check if the image data is at least 78 bytes long
+                                if (category.Picture.Length > 78)
+                                {
+                                    // Create a new byte array with the first 78 bytes removed
+                                    byte[] modifiedImageData = new byte[category.Picture.Length - 78];
+                                    Array.Copy(category.Picture, 78, modifiedImageData, 0, category.Picture.Length - 78);
+
+                                    // Convert the modified byte array to a data URI
+                                    <img src="data:image/jpeg;base64,@Convert.ToBase64String(modifiedImageData)" alt="Category Image" />
+                                }
+                                else
+                                {
+                                    // If the image data is less than 78 bytes, display the original image
+                                    <img src="data:image/jpeg;base64,@Convert.ToBase64String(category.Picture)" alt="Category Image" />
+                                }
+                            }
+                            else
+                            {
+                                <p>No Image Available</p>
+                            }
+                        </td>
+                    </tr>
+                }
+            }
+            else
+            {
+                <tr>
+                    <td colspan="3">No categories found.</td>
+                </tr>
+            }
+        </tbody>
+    </table>
+
+    </body>
+</html>
